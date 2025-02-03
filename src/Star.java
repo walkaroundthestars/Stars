@@ -17,7 +17,7 @@ public class Star
 
     public Star(String name, Declination declination, Rectascension rectascension,
                 double observedStellarMagnitude, double distance, String constellation,
-                String hemisphere, float temperature, double mass) throws Exception {
+                String hemisphere, double temperature, double mass) throws Exception {
         //ustawianie nazwy gwiazdy
         setName(name);
 
@@ -86,6 +86,7 @@ public class Star
     //metoda do ustawiania nazwy katalogowej
     public void setCatalogName(String constellation)
     {
+        //TODO index
         //ustawiać nazwe na podstawie indexu
         int index = 1;
 
