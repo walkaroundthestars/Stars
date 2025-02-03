@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,29 +10,81 @@ public class Main
 
     public static void main(String[] args)
     {
-        System.out.println("Hello world!");
-        
+        try
+        {
+            Star test = new Star("LAM-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PN", 2500, 0.5);
+            Star test1 = new Star("RAM-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PN", 2500, 0.5);
+
+            //addStar(test);
+            //addStar(test1);
+            //saveStars();
+            loadStars();
+            showStars();
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+
+        //loadStars();
     }
 
-    public void loadStars()
+    //funkcja wyświetlająca gwiazdy
+    public static void showStars()
     {
-
+        //dopracować
+        for (Star s : stars)
+        {
+            System.out.println("Gwiazda o nazwie: " + s.getName());
+        }
     }
 
-    public void saveStars()
+    //dodawanie elementu typu gwiazda
+    public static void addStar(Star newStar) throws Exception
     {
+        boolean isNameInFile = false;
+        for (Star star : stars){
+            if (star.getName().equals(newStar.getName()))
+            {
+                isNameInFile = true;
+            }
+        }
 
+        if (!isNameInFile)
+        {
+            stars.add(newStar);
+        }
+        else
+        {
+            throw new Exception("Star with this name already exists");
+        }
     }
 
-    public void addStar(String name, Declination declination, Rectascension rectascension,
+    //dodawanie elementu przez parametry
+    public static void addStar(String name, Declination declination, Rectascension rectascension,
                         double observedStellarMagnitude, double distance, String constellation,
                         String hemisphere, double temperature, double mass) throws Exception
     {
-        Star star = new Star(name, declination, rectascension, observedStellarMagnitude, distance, constellation, hemisphere, temperature, mass);
-        stars.add(star);
+        boolean isNameInFile = false;
+        for (Star star : stars){
+            if (star.getName().equals(name))
+            {
+                isNameInFile = true;
+            }
+        }
+
+        if (!isNameInFile)
+        {
+            Star newStar = new Star(name, declination, rectascension, observedStellarMagnitude, distance, constellation, hemisphere, temperature, mass);
+            stars.add(newStar);
+        }
+        else
+        {
+            throw new Exception("Star with this name already exists");
+        }
     }
 
-    public void showStars()
+    public static void loadStars()
     {
         String filePath = "stars.csv";
 
@@ -44,17 +93,16 @@ public class Main
             String line;
             while ((line = br.readLine()) != null) {
                 //odczytanie wszystkich danych o gwieździe
-                String[] values = line.split(",");
+                String[] values = line.split(";");
 
                 //odczytanie deklinacji gwiazdy
                 String[] decTab = values[2].split(":");
-                int[] decInt = new int[decTab.length];
-                for (int i = 0; i < decTab.length; i++)
-                {
-                    int el = Integer.parseInt(decTab[i]);
-                    decInt[i] = el;
-                }
-                Declination dec = new Declination(decInt[0], decInt[1], decInt[2]);
+
+                int xx = Integer.parseInt(decTab[0]);
+                int yy = Integer.parseInt(decTab[1]);
+                double zz = Double.parseDouble(decTab[2]);
+
+                Declination dec = new Declination(xx, yy, zz);
 
                 //odczytanie rektascencji
                 String[] rectTab = values[3].split(":");
@@ -82,6 +130,29 @@ public class Main
                 System.out.println("Nazwa: " + values[0] + ", Nazwa katalogowa: " + values[1]);
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void saveStars()
+    {
+        String filePath = "stars.csv";
+
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8)))
+        {
+            //bw.write("ID,Nazwa,Cena\n");
+            for (Star s : stars)
+            {
+                bw.write(s.getName() +";"+ s.getCatalogName() +";"+ s.getDeclination().getXx()+":"+s.getDeclination().getYy()+":"+s.getDeclination().getZz()+";"+s.getRectascension().getXx()+":"+s.getRectascension().getYy()+":"+s.getRectascension().getZz()+";"+s.getObservedStellarMagnitude()+";"+s.getAbsoluteStellarMagnitude()+";"+s.getDistance()+";"+s.getConstellation()+";"+s.getHemisphere()+";"+s.getTemperature()+";"+s.getMass()+"\n");
+            }
+            //bw.write("1,Laptop,2500\n");
+            //bw.write("2,Smartfon,1500\n");
+            //bw.write("3,Tablet,1200\n");
+
+            System.out.println("Plik CSV został zapisany.");
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
     }
