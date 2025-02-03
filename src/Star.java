@@ -16,10 +16,13 @@ public class Star
     private GreekLetters[] greekLetters = GreekLetters.values();
 
     public Star(String name, Declination declination, Rectascension rectascension,
-                double observedStellarMagnitude, double distance,
-                String constellation, String hemisphere, float temperature, double mass) throws Exception {
+                double observedStellarMagnitude, double distance, String constellation,
+                String hemisphere, float temperature, double mass) throws Exception {
         //ustawianie nazwy gwiazdy
         setName(name);
+
+        //ustawienie nazwy konstelacji
+        setConstellation(constellation);
 
         //ustawianie nazwy katalogowej
         setCatalogName(constellation);
@@ -63,6 +66,16 @@ public class Star
         {
             throw new Exception("Name doesn't match the pattern");
         }
+    }
+
+    public String getConstellation()
+    {
+        return constellation;
+    }
+
+    public void setConstellation(String constellation) throws Exception
+    {
+        this.constellation = constellation;
     }
 
     public String getCatalogName()
