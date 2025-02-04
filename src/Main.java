@@ -15,6 +15,7 @@ public class Main
             Star test = new Star("LAM-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PN", 2500, 0.5);
             Star test1 = new Star("RAM-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PN", 2500, 0.5);
             Star testDel = new Star("ABB-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Ryb",  "PN", 2500, 0.5);
+            Star supernova = new Star("STS-2734", new Declination(-80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PD", 3700, 1.7);
 
             //loadStars();
             //addStar(test);
@@ -22,9 +23,16 @@ public class Main
             //addStar(testDel);
             //saveStars();
             //loadStars();
+            addStar(supernova);
+            saveStars();
             showStars();
             //deleteStar("beta Ryb");
-            searchByConstellation("Ryb");
+            //searchByConstellation("Ryb");
+            //searchByDistance(9.78);
+            //searchByTemperature(2300, 2700);
+            //searchByObserved(5, 12);
+            //searchByHemisphere("PN");
+            findSupernovas();
         }
         catch (Exception e)
         {
@@ -105,8 +113,10 @@ public class Main
         }
     }
 
+    //odczytywanie gwiazd z pliku csv
     public static void loadStars()
     {
+        //dodać pomijanie gwiazd które są już na liście
         String filePath = "stars.csv";
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8)))
@@ -155,6 +165,7 @@ public class Main
         }
     }
 
+    //zapisywanie gwiazd do pliku csv
     public static void saveStars()
     {
         String filePath = "stars.csv";
@@ -178,6 +189,7 @@ public class Main
         }
     }
 
+    //usuwanie gwiazdy na podstawie nazwy katalogowej
     public static void deleteStar(String catalogName)
     {
         for (Star star : stars)
@@ -195,15 +207,75 @@ public class Main
 
     }
 
+    //funkcja do wyszukiwania wszystkich gwiazd w danym gwiazdozbiorze
     public static void searchByConstellation(String constellation)
     {
-        //loadStars();
-
         for (Star star : stars)
         {
             if (star.getConstellation().equals(constellation))
             {
                 System.out.println(constellation + ": " + star.getName() + " " + star.getCatalogName());
+            }
+        }
+    }
+
+    //wyszukiwanie gwiazd na podstawie dystansu
+    public static void searchByDistance(double parsecs)
+    {
+        for (Star star : stars)
+        {
+            double distanceInParsecs = star.getDistance() * 3.26;
+            if (distanceInParsecs == parsecs )
+            {
+                System.out.println(star.getName() + " " + star.getCatalogName() + " - " + distanceInParsecs);
+            }
+        }
+    }
+
+    //wyszukiwanie gwiazd których temperatura mieści się w danym przedziale
+    public static void searchByTemperature(double minTemperature, double maxTemperature)
+    {
+        for (Star star : stars)
+        {
+            if (star.getTemperature() <= maxTemperature && star.getTemperature() >= minTemperature)
+            {
+                System.out.println(star.getName() + " " + star.getCatalogName() + " - " + star.getTemperature());
+            }
+        }
+    }
+
+    //wyszukiwanie po obserwowanej wielkości gwiazdowej
+    public static void searchByObserved(double minOSM, double maxOSM)
+    {
+        for (Star star : stars)
+        {
+            if (star.getObservedStellarMagnitude() <= maxOSM && star.getObservedStellarMagnitude() >= minOSM)
+            {
+                System.out.println(star.getName() + " " + star.getCatalogName() + " - " + star.getObservedStellarMagnitude());
+            }
+        }
+    }
+
+    //wyszukowanie gwiazd z danej półkuli
+    public static void searchByHemisphere(String hemisphere)
+    {
+        for (Star star : stars)
+        {
+            if (star.getHemisphere().equals(hemisphere))
+            {
+                System.out.println(hemisphere + ": " + star.getName() + " " + star.getCatalogName());
+            }
+        }
+    }
+
+    //wyszukiwanie potencjalnych supernowych
+    public static void findSupernovas()
+    {
+        for (Star star : stars)
+        {
+            if (star.getMass() >= 1.44)
+            {
+                System.out.println(star.getName() + " " + star.getCatalogName() + " - " + star.getMass());
             }
         }
     }
