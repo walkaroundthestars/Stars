@@ -16,14 +16,15 @@ public class Main
             Star test1 = new Star("RAM-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PN", 2500, 0.5);
             Star testDel = new Star("ABB-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Ryb",  "PN", 2500, 0.5);
 
-            loadStars();
-            addStar(test);
-            addStar(test1);
-            addStar(testDel);
-            saveStars();
+            //loadStars();
+            //addStar(test);
+            //addStar(test1);
+            //addStar(testDel);
+            //saveStars();
             //loadStars();
             showStars();
             //deleteStar("beta Ryb");
+            searchByConstellation("Ryb");
         }
         catch (Exception e)
         {
@@ -35,9 +36,27 @@ public class Main
     public static void showStars()
     {
         //dopracować
-        for (Star s : stars)
+        if (!stars.isEmpty())
         {
-            System.out.println("Gwiazda o nazwie: " + s.getName());
+            for (Star s : stars)
+            {
+                System.out.println("Gwiazda o nazwie: " + s.getName());
+            }
+        }
+        else
+        {
+            loadStars();
+            if (stars.isEmpty())
+            {
+                System.out.print("Baza jest pusta");
+            }
+            else
+            {
+                for (Star s : stars)
+                {
+                    System.out.println("Gwiazda o nazwie: " + s.getName());
+                }
+            }
         }
     }
 
@@ -174,6 +193,19 @@ public class Main
     public void updateCatalogNames()
     {
 
+    }
+
+    public static void searchByConstellation(String constellation)
+    {
+        //loadStars();
+
+        for (Star star : stars)
+        {
+            if (star.getConstellation().equals(constellation))
+            {
+                System.out.println(constellation + ": " + star.getName() + " " + star.getCatalogName());
+            }
+        }
     }
 }
 
