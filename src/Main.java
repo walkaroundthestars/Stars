@@ -17,12 +17,12 @@ public class Main
             Star testDel = new Star("ABB-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Ryb",  "PN", 2500, 0.5);
             Star supernova = new Star("STS-2734", new Declination(-80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PD", 3700, 1.7);
 
-            //loadStars();
-            //addStar(test);
-            //addStar(test1);
-            //addStar(testDel);
-            //saveStars();
-            //loadStars();
+            loadStars();
+            addStar(test);
+            addStar(test1);
+            addStar(testDel);
+            saveStars();
+            loadStars();
             addStar(supernova);
             saveStars();
             showStars();
@@ -89,30 +89,6 @@ public class Main
         }
     }
 
-    //dodawanie elementu przez parametry
-    public static void addStar(String name, Declination declination, Rectascension rectascension,
-                        double observedStellarMagnitude, double distance, String constellation,
-                        String hemisphere, double temperature, double mass) throws Exception
-    {
-        boolean isNameInFile = false;
-        for (Star star : stars){
-            if (star.getName().equals(name))
-            {
-                isNameInFile = true;
-            }
-        }
-
-        if (!isNameInFile)
-        {
-            Star newStar = new Star(name, declination, rectascension, observedStellarMagnitude, distance, constellation, hemisphere, temperature, mass);
-            stars.add(newStar);
-        }
-        else
-        {
-            throw new Exception("Star with this name already exists");
-        }
-    }
-
     //odczytywanie gwiazd z pliku csv
     public static void loadStars()
     {
@@ -157,8 +133,11 @@ public class Main
                 //odczytanie masy gwiazdy
                 double mass = Double.parseDouble(values[10]);
 
-                addStar(values[0], dec, rect, oSM, distance, values[7], values[8], temp, mass);
-                //System.out.println("Nazwa: " + values[0] + ", Nazwa katalogowa: " + values[1]);
+                Star newStar = new Star(values[0], dec, rect, oSM, distance, values[7], values[8], temp, mass);
+                if (!stars.contains(newStar))
+                {
+                    stars.add(newStar);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -172,14 +151,10 @@ public class Main
 
         try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8)))
         {
-            //bw.write("ID,Nazwa,Cena\n");
             for (Star s : stars)
             {
                 bw.write(s.getName() +";"+ s.getCatalogName() +";"+ s.getDeclination().getXx()+":"+s.getDeclination().getYy()+":"+s.getDeclination().getZz()+";"+s.getRectascension().getXx()+":"+s.getRectascension().getYy()+":"+s.getRectascension().getZz()+";"+s.getObservedStellarMagnitude()+";"+s.getAbsoluteStellarMagnitude()+";"+s.getDistance()+";"+s.getConstellation()+";"+s.getHemisphere()+";"+s.getTemperature()+";"+s.getMass()+"\n");
             }
-            //bw.write("1,Laptop,2500\n");
-            //bw.write("2,Smartfon,1500\n");
-            //bw.write("3,Tablet,1200\n");
 
             System.out.println("Plik CSV został zapisany.");
         }

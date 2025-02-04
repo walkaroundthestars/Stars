@@ -1,4 +1,9 @@
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.lang.Math;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class Star
 {
@@ -88,9 +93,31 @@ public class Star
     {
         //TODO index
         //ustawiać nazwe na podstawie indexu
-        int index = 1;
 
-        this.catalogName = greekLetters[index].toString() + " " + constellation;
+        ArrayList<String> starsInConstellation = new ArrayList<String>();
+
+        String filePath = "stars.csv";
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8)))
+        {
+            String line;
+            while ((line = br.readLine()) != null) {
+                //odczytanie gwiazd z tego samego gwiazdozbioru
+                String[] values = line.split(";");
+
+                if (values[7].equals(constellation))
+                {
+                    String name = values[0];
+                    starsInConstellation.add(name);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        this.catalogName = greekLetters[starsInConstellation.size() - 1].toString() + " " + constellation;
     }
 
     public String getHemisphere()
