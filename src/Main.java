@@ -14,19 +14,21 @@ public class Main
         {
             Star test = new Star("LAM-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PN", 2500, 0.5);
             Star test1 = new Star("RAM-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PN", 2500, 0.5);
+            Star testDel = new Star("ABB-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Ryb",  "PN", 2500, 0.5);
 
-            //addStar(test);
-            //addStar(test1);
-            //saveStars();
             loadStars();
+            addStar(test);
+            addStar(test1);
+            addStar(testDel);
+            saveStars();
+            //loadStars();
             showStars();
+            //deleteStar("beta Ryb");
         }
         catch (Exception e)
         {
             System.out.println(e.getMessage());
         }
-
-        //loadStars();
     }
 
     //funkcja wyświetlająca gwiazdy
@@ -127,7 +129,7 @@ public class Main
                 double mass = Double.parseDouble(values[10]);
 
                 addStar(values[0], dec, rect, oSM, distance, values[7], values[8], temp, mass);
-                System.out.println("Nazwa: " + values[0] + ", Nazwa katalogowa: " + values[1]);
+                //System.out.println("Nazwa: " + values[0] + ", Nazwa katalogowa: " + values[1]);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -157,9 +159,16 @@ public class Main
         }
     }
 
-    public void deleteStar()
+    public static void deleteStar(String catalogName)
     {
-
+        for (Star star : stars)
+        {
+            if (star.getCatalogName().equals(catalogName))
+            {
+                stars.remove(star);
+            }
+        }
+        saveStars();
     }
 
     public void updateCatalogNames()
