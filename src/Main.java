@@ -17,14 +17,17 @@ public class Main
             Star testDel = new Star("ABB-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Ryb",  "PN", 2500, 0.5);
             Star supernova = new Star("STS-2734", new Declination(-80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PD", 3700, 1.7);
 
-            loadStars();
+            //loadStars();
             addStar(test);
-            addStar(test1);
-            addStar(testDel);
             saveStars();
             loadStars();
+            addStar(test1);
+            //saveStars();
+            addStar(testDel);
+            //saveStars();
             addStar(supernova);
             saveStars();
+            //loadStars();
             showStars();
             //deleteStar("beta Ryb");
             //searchByConstellation("Ryb");
@@ -48,7 +51,7 @@ public class Main
         {
             for (Star s : stars)
             {
-                System.out.println("Gwiazda o nazwie: " + s.getName());
+                System.out.println("Gwiazda o nazwie: " + s.getName() + " " + s.getCatalogName() +" "+ s.getDeclination().getXx()+" "+s.getDeclination().getYy()+" "+s.getDeclination().getZz()+" "+s.getRectascension().getXx()+" "+s.getRectascension().getYy()+" "+s.getRectascension().getZz()+" "+s.getObservedStellarMagnitude()+" "+s.getAbsoluteStellarMagnitude()+" "+s.getDistance()+" "+s.getConstellation()+" "+s.getHemisphere()+" "+s.getTemperature()+" "+s.getMass());
             }
         }
         else
@@ -134,7 +137,16 @@ public class Main
                 double mass = Double.parseDouble(values[10]);
 
                 Star newStar = new Star(values[0], dec, rect, oSM, distance, values[7], values[8], temp, mass);
-                if (!stars.contains(newStar))
+                boolean isNameInFile = false;
+                for (Star s : stars)
+                {
+                    if (s.getName().equals(newStar.getName()))
+                    {
+                        isNameInFile = true;
+                    }
+                }
+
+                if (!isNameInFile)
                 {
                     stars.add(newStar);
                 }

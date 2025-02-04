@@ -94,21 +94,25 @@ public class Star
         //TODO index
         //ustawiać nazwe na podstawie indexu
 
-        ArrayList<String> starsInConstellation = new ArrayList<String>();
-
+        int numberOfStars = 0;
         String filePath = "stars.csv";
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8)))
         {
             String line;
-            while ((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null)
+            {
                 //odczytanie gwiazd z tego samego gwiazdozbioru
-                String[] values = line.split(";");
 
-                if (values[7].equals(constellation))
+                //ma odczytywać tylko do momentu napotkania tej gwiazdy rekurencyjnie,
+                // a nie zliczać liczbę wszystkich gwiazd w gwiazdozbiorze
+                String[] values = line.split(";");
+                if (values.length > 0)
                 {
-                    String name = values[0];
-                    starsInConstellation.add(name);
+                    if (values[7].equals(constellation))
+                    {
+                        numberOfStars++;
+                    }
                 }
             }
         }
@@ -116,8 +120,10 @@ public class Star
         {
             e.printStackTrace();
         }
-
-        this.catalogName = greekLetters[starsInConstellation.size() - 1].toString() + " " + constellation;
+        if (numberOfStars > 0)
+            this.catalogName = greekLetters[numberOfStars - 1].toString() + " " + constellation;
+        else if (numberOfStars == 0)
+            this.catalogName = greekLetters[numberOfStars].toString() + " " + constellation;
     }
 
     public String getHemisphere()
