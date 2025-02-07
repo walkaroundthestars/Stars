@@ -10,6 +10,7 @@ public class Main
     {
         try
         {
+            //przykładowe obiekty klasy Star
             Star lam = new Star("LAM-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PN", 2500, 0.5);
             Star ram = new Star("RAM-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PN", 2500, 0.5);
             Star abb = new Star("ABB-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Ryb",  "PN", 2500, 0.5);
@@ -22,7 +23,7 @@ public class Main
             //addStar(supernova);
             //saveStars();     //zapisanie danych do pliku
             //showStars();      //wyświetlenie wszystkich gwiazd
-            //deleteStar("RAM-1234");    //usuwanie gwiazd po nazwie
+            //deleteStar("STS-2734");    //usuwanie gwiazd po nazwie
             //searchByConstellation("Ryb");    //wyszukiwanie po gwiazdozbiorze
             //searchByDistance(9.78);        //wyszukiwanie po dystansie
             //searchByTemperature(2300, 2700);     //wyszukiwanie po temperaturze
@@ -63,7 +64,7 @@ public class Main
         }
     }
 
-    //dodawanie elementu typu gwiazda
+    //dodawanie elementu typu gwiazda. Funkcja przyjmuje jako parametr nowy obiekt
     public static void addStar(Star newStar) throws Exception
     {
         boolean isNameInFile = false;
@@ -180,7 +181,7 @@ public class Main
         }
     }
 
-    //usuwanie gwiazdy na podstawie nazwy
+    //usuwanie gwiazdy na podstawie nazwy, która jest przekazywana przez parametr
     public static void deleteStar(String name)
     {
         for (int i = stars.size() - 1; i >= 0; i--)
@@ -192,7 +193,6 @@ public class Main
         }
         saveStars();
         updateCatalogNames();
-        saveStars();
     }
 
     //funckja aktualizująca nazwy katalogowe gwiazd
@@ -202,9 +202,10 @@ public class Main
         {
             star.setCatalogName(star.getConstellation());
         }
+        saveStars();
     }
 
-    //funkcja do wyszukiwania wszystkich gwiazd w danym gwiazdozbiorze
+    //funkcja do wyszukiwania wszystkich gwiazd w danym gwiazdozbiorze, który jest przekazywany przez parametr
     public static void searchByConstellation(String constellation)
     {
         for (Star star : stars)
@@ -216,7 +217,7 @@ public class Main
         }
     }
 
-    //wyszukiwanie gwiazd na podstawie dystansu
+    //wyszukiwanie gwiazd na podstawie dystansu, który jest podany jako parametr
     public static void searchByDistance(double parsecs)
     {
         for (Star star : stars)
@@ -229,7 +230,7 @@ public class Main
         }
     }
 
-    //wyszukiwanie gwiazd których temperatura mieści się w danym przedziale
+    //wyszukiwanie gwiazd których temperatura mieści się w danym przedziale, przekazanym do funkcji jako parametry (początek i koniec przedziału)
     public static void searchByTemperature(double minTemperature, double maxTemperature)
     {
         for (Star star : stars)
@@ -241,7 +242,7 @@ public class Main
         }
     }
 
-    //wyszukiwanie po obserwowanej wielkości gwiazdowej
+    //wyszukiwanie po obserwowanej wielkości gwiazdowej, zakres przekazywany jest do funcji jako parametry
     public static void searchByObserved(double minOSM, double maxOSM)
     {
         for (Star star : stars)
@@ -253,7 +254,7 @@ public class Main
         }
     }
 
-    //wyszukowanie gwiazd z danej półkuli
+    //wyszukowanie gwiazd z danej półkuli, która przekazywana jest w parametrze
     public static void searchByHemisphere(String hemisphere)
     {
         for (Star star : stars)
