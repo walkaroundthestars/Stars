@@ -22,7 +22,8 @@ public class Star
 
     public Star(String name, Declination declination, Rectascension rectascension,
                 double observedStellarMagnitude, double distance, String constellation,
-                String hemisphere, double temperature, double mass) throws Exception {
+                String hemisphere, double temperature, double mass) throws Exception
+    {
         //ustawianie nazwy gwiazdy
         setName(name);
 
@@ -62,7 +63,8 @@ public class Star
         return name;
     }
     //metoda do ustawiania nazwy
-    public void setName(String name) throws Exception {
+    public void setName(String name) throws Exception
+    {
         if (name.matches("^[A-Z][A-Z][A-Z]-[0-9][0-9][0-9][0-9]$"))
         {
             this.name = name;

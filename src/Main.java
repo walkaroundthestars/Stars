@@ -10,15 +10,15 @@ public class Main
     {
         try
         {
-            Star test = new Star("LAM-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PN", 2500, 0.5);
-            Star test1 = new Star("RAM-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PN", 2500, 0.5);
-            Star testDel = new Star("ABB-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Ryb",  "PN", 2500, 0.5);
+            Star lam = new Star("LAM-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PN", 2500, 0.5);
+            Star ram = new Star("RAM-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PN", 2500, 0.5);
+            Star abb = new Star("ABB-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Ryb",  "PN", 2500, 0.5);
             Star supernova = new Star("STS-2734", new Declination(-80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PD", 3700, 1.7);
 
             //loadStars();    //odczytanie danych z pliku i wczytanie do listy
-            //addStar(test);  //dodanie przykładowych gwiazd
-            //addStar(test1);
-            //addStar(testDel);
+            //addStar(lam);  //dodanie przykładowych gwiazd
+            //addStar(ram);
+            //addStar(abb);
             //addStar(supernova);
             //saveStars();     //zapisanie danych do pliku
             //showStars();      //wyświetlenie wszystkich gwiazd
@@ -39,7 +39,6 @@ public class Main
     //funkcja wyświetlająca gwiazdy
     public static void showStars()
     {
-        //dopracować
         if (!stars.isEmpty())
         {
             for (Star s : stars)
@@ -68,7 +67,8 @@ public class Main
     public static void addStar(Star newStar) throws Exception
     {
         boolean isNameInFile = false;
-        for (Star star : stars){
+        for (Star star : stars)
+        {
             if (star.getName().equals(newStar.getName()))
             {
                 isNameInFile = true;
@@ -82,14 +82,13 @@ public class Main
         }
         else
         {
-            throw new Exception("Star with this name already exists");
+            throw new Exception("Gwiazda o tej nazwie już istnieje.");
         }
     }
 
     //odczytywanie gwiazd z pliku csv
     public static void loadStars()
     {
-        //dodać pomijanie gwiazd które są już na liście
         String filePath = "stars.csv";
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8)))
@@ -114,7 +113,8 @@ public class Main
                     //odczytanie rektascencji
                     String[] rectTab = values[3].split(":");
                     int[] rectInt = new int[rectTab.length];
-                    for (int i = 0; i < rectTab.length; i++) {
+                    for (int i = 0; i < rectTab.length; i++)
+                    {
                         int el = Integer.parseInt(rectTab[i]);
                         rectInt[i] = el;
                     }
@@ -134,7 +134,8 @@ public class Main
 
                     Star newStar = new Star(values[0], dec, rect, oSM, distance, values[7], values[8], temp, mass);
                     boolean isNameInFile = false;
-                    for (Star s : stars) {
+                    for (Star s : stars)
+                    {
                         if (s.getName().equals(newStar.getName()))
                         {
                             isNameInFile = true;
@@ -152,7 +153,9 @@ public class Main
             {
                 System.out.println("Baza jest pusta");
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
@@ -192,6 +195,7 @@ public class Main
         saveStars();
     }
 
+    //funckja aktualizująca nazwy katalogowe gwiazd
     public static void updateCatalogNames()
     {
         for (Star star : stars)
