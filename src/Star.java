@@ -107,11 +107,13 @@ public class Star
                 //ma odczytywać tylko do momentu napotkania tej gwiazdy rekurencyjnie,
                 // a nie zliczać liczbę wszystkich gwiazd w gwiazdozbiorze
                 String[] values = line.split(";");
-                if (values.length > 0)
+                if (values.length > 7 && values[7].equals(constellation))
                 {
-                    if (values[7].equals(constellation))
+                    numberOfStars++;
+
+                    if (values[0].equals(this.name))
                     {
-                        numberOfStars++;
+                        break;
                     }
                 }
             }

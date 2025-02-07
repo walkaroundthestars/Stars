@@ -17,25 +17,25 @@ public class Main
             Star testDel = new Star("ABB-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Ryb",  "PN", 2500, 0.5);
             Star supernova = new Star("STS-2734", new Declination(-80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PD", 3700, 1.7);
 
-            //loadStars();
-            addStar(test);
-            saveStars();
             loadStars();
-            addStar(test1);
+            //addStar(test);
             //saveStars();
-            addStar(testDel);
+            //addStar(test1);
             //saveStars();
-            addStar(supernova);
+            //addStar(testDel);
+            //saveStars();
+            //addStar(supernova);
             saveStars();
             //loadStars();
             showStars();
-            //deleteStar("beta Ryb");
+            //deleteStar("LAM-1234");
             //searchByConstellation("Ryb");
             //searchByDistance(9.78);
             //searchByTemperature(2300, 2700);
             //searchByObserved(5, 12);
             //searchByHemisphere("PN");
-            findSupernovas();
+            //loadStars();
+            //findSupernovas();
         }
         catch (Exception e)
         {
@@ -85,6 +85,7 @@ public class Main
         if (!isNameInFile)
         {
             stars.add(newStar);
+            updateCatalogNames();
         }
         else
         {
@@ -101,55 +102,60 @@ public class Main
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8)))
         {
             String line;
-            while ((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null)
+            {
                 //odczytanie wszystkich danych o gwieździe
                 String[] values = line.split(";");
 
-                //odczytanie deklinacji gwiazdy
-                String[] decTab = values[2].split(":");
-
-                int xx = Integer.parseInt(decTab[0]);
-                int yy = Integer.parseInt(decTab[1]);
-                double zz = Double.parseDouble(decTab[2]);
-
-                Declination dec = new Declination(xx, yy, zz);
-
-                //odczytanie rektascencji
-                String[] rectTab = values[3].split(":");
-                int[] rectInt = new int[rectTab.length];
-                for (int i = 0; i < rectTab.length; i++)
+                if (values.length == 11)
                 {
-                    int el = Integer.parseInt(rectTab[i]);
-                    rectInt[i] = el;
-                }
-                Rectascension rect = new Rectascension(rectInt[0], rectInt[1], rectInt[2]);
+                    //odczytanie deklinacji gwiazdy
+                    String[] decTab = values[2].split(":");
 
-                //odczytanie obserwowanej wielkości gwiazdy
-                double oSM = Double.parseDouble(values[4]);
+                    int xx = Integer.parseInt(decTab[0]);
+                    int yy = Integer.parseInt(decTab[1]);
+                    double zz = Double.parseDouble(decTab[2]);
 
-                //odczytanie dystansu
-                double distance = Double.parseDouble(values[6]);
+                    Declination dec = new Declination(xx, yy, zz);
 
-                //odczytanie temperatury
-                double temp = Double.parseDouble(values[9]);
+                    //odczytanie rektascencji
+                    String[] rectTab = values[3].split(":");
+                    int[] rectInt = new int[rectTab.length];
+                    for (int i = 0; i < rectTab.length; i++) {
+                        int el = Integer.parseInt(rectTab[i]);
+                        rectInt[i] = el;
+                    }
+                    Rectascension rect = new Rectascension(rectInt[0], rectInt[1], rectInt[2]);
 
-                //odczytanie masy gwiazdy
-                double mass = Double.parseDouble(values[10]);
+                    //odczytanie obserwowanej wielkości gwiazdy
+                    double oSM = Double.parseDouble(values[4]);
 
-                Star newStar = new Star(values[0], dec, rect, oSM, distance, values[7], values[8], temp, mass);
-                boolean isNameInFile = false;
-                for (Star s : stars)
-                {
-                    if (s.getName().equals(newStar.getName()))
-                    {
-                        isNameInFile = true;
+                    //odczytanie dystansu
+                    double distance = Double.parseDouble(values[6]);
+
+                    //odczytanie temperatury
+                    double temp = Double.parseDouble(values[9]);
+
+                    //odczytanie masy gwiazdy
+                    double mass = Double.parseDouble(values[10]);
+
+                    Star newStar = new Star(values[0], dec, rect, oSM, distance, values[7], values[8], temp, mass);
+                    boolean isNameInFile = false;
+                    for (Star s : stars) {
+                        if (s.getName().equals(newStar.getName())) {
+                            isNameInFile = true;
+                        }
+                    }
+
+                    if (!isNameInFile) {
+                        stars.add(newStar);
                     }
                 }
+            }
 
-                if (!isNameInFile)
-                {
-                    stars.add(newStar);
-                }
+            if (stars.isEmpty())
+            {
+                System.out.println("Baza jest pusta");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -176,22 +182,26 @@ public class Main
         }
     }
 
-    //usuwanie gwiazdy na podstawie nazwy katalogowej
-    public static void deleteStar(String catalogName)
+    //usuwanie gwiazdy na podstawie nazwy
+    public static void deleteStar(String name)
     {
-        for (Star star : stars)
+        for (int i = stars.size() - 1; i >= 0; i--)
         {
-            if (star.getCatalogName().equals(catalogName))
+            if (stars.get(i).getName().equals(name))
             {
-                stars.remove(star);
+                stars.remove(i);  // usuwanie elementu po indeksie
             }
         }
+        updateCatalogNames();
         saveStars();
     }
 
-    public void updateCatalogNames()
+    public static void updateCatalogNames()
     {
-
+        for (Star star : stars)
+        {
+            star.setCatalogName(star.getConstellation());
+        }
     }
 
     //funkcja do wyszukiwania wszystkich gwiazd w danym gwiazdozbiorze
