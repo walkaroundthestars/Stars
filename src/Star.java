@@ -91,11 +91,8 @@ public class Star
     //metoda do ustawiania nazwy katalogowej
     public void setCatalogName(String constellation)
     {
-        //TODO index
-        //ustawiać nazwe na podstawie indexu
-
-        int numberOfStars = 0;
         String filePath = "stars.csv";
+        ArrayList<String> names = new ArrayList<String>();
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8)))
         {
@@ -103,18 +100,14 @@ public class Star
             while ((line = br.readLine()) != null)
             {
                 //odczytanie gwiazd z tego samego gwiazdozbioru
-
-                //ma odczytywać tylko do momentu napotkania tej gwiazdy rekurencyjnie,
-                // a nie zliczać liczbę wszystkich gwiazd w gwiazdozbiorze
                 String[] values = line.split(";");
                 if (values.length > 7 && values[7].equals(constellation))
                 {
-                    numberOfStars++;
-
                     if (values[0].equals(this.name))
                     {
                         break;
                     }
+                    names.add(values[0]);
                 }
             }
         }
@@ -122,10 +115,27 @@ public class Star
         {
             e.printStackTrace();
         }
-        if (numberOfStars > 0)
-            this.catalogName = greekLetters[numberOfStars - 1].toString() + " " + constellation;
-        else if (numberOfStars == 0)
-            this.catalogName = greekLetters[numberOfStars].toString() + " " + constellation;
+
+        for (Star star : Main.stars)
+        {
+            if (star.getConstellation().equals(constellation))
+            {
+                if (star.getName().equals(name))
+                {
+                    break;
+                }
+
+                if (!names.contains(star.getName()))
+                {
+                    names.add(star.getName());
+                }
+            }
+        }
+
+        if (names.size() < greekLetters.length)
+            this.catalogName = greekLetters[names.size()].toString() + " " + constellation;
+        else
+            this.catalogName = "pozaAlfabetem " + constellation;
     }
 
     public String getHemisphere()
@@ -150,6 +160,7 @@ public class Star
     {
         return declination;
     }
+
     //metoda do ustawiania deklinacji
     public void setDeclination(Declination declination) throws Exception
     {

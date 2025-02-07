@@ -1,12 +1,10 @@
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
 
 public class Main
 {
-    private static ArrayList<Star> stars = new ArrayList<Star>();
+    public static ArrayList<Star> stars = new ArrayList<Star>();
 
     public static void main(String[] args)
     {
@@ -17,25 +15,20 @@ public class Main
             Star testDel = new Star("ABB-1234", new Declination(80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Ryb",  "PN", 2500, 0.5);
             Star supernova = new Star("STS-2734", new Declination(-80, 30, 30.30), new Rectascension(14, 30, 30), 10,3,"Swan",  "PD", 3700, 1.7);
 
-            loadStars();
-            //addStar(test);
-            //saveStars();
+            //loadStars();    //odczytanie danych z pliku i wczytanie do listy
+            //addStar(test);  //dodanie przykładowych gwiazd
             //addStar(test1);
-            //saveStars();
             //addStar(testDel);
-            //saveStars();
             //addStar(supernova);
-            saveStars();
-            //loadStars();
-            showStars();
-            //deleteStar("LAM-1234");
-            //searchByConstellation("Ryb");
-            //searchByDistance(9.78);
-            //searchByTemperature(2300, 2700);
-            //searchByObserved(5, 12);
-            //searchByHemisphere("PN");
-            //loadStars();
-            //findSupernovas();
+            //saveStars();     //zapisanie danych do pliku
+            //showStars();      //wyświetlenie wszystkich gwiazd
+            //deleteStar("RAM-1234");    //usuwanie gwiazd po nazwie
+            //searchByConstellation("Ryb");    //wyszukiwanie po gwiazdozbiorze
+            //searchByDistance(9.78);        //wyszukiwanie po dystansie
+            //searchByTemperature(2300, 2700);     //wyszukiwanie po temperaturze
+            //searchByObserved(5, 12);       //wyszukiwanie po obserwowanej wielkości gwiazdowej
+            //searchByHemisphere("PN");     //wyszukiwanie po półkuli
+            //findSupernovas();             //wyświetlenie potencjalnych supernowych
         }
         catch (Exception e)
         {
@@ -65,7 +58,7 @@ public class Main
             {
                 for (Star s : stars)
                 {
-                    System.out.println("Gwiazda o nazwie: " + s.getName());
+                    System.out.println("Gwiazda o nazwie: " + s.getName()  + " " + s.getCatalogName() +" "+ s.getDeclination().getXx()+" "+s.getDeclination().getYy()+" "+s.getDeclination().getZz()+" "+s.getRectascension().getXx()+" "+s.getRectascension().getYy()+" "+s.getRectascension().getZz()+" "+s.getObservedStellarMagnitude()+" "+s.getAbsoluteStellarMagnitude()+" "+s.getDistance()+" "+s.getConstellation()+" "+s.getHemisphere()+" "+s.getTemperature()+" "+s.getMass());
                 }
             }
         }
@@ -142,12 +135,14 @@ public class Main
                     Star newStar = new Star(values[0], dec, rect, oSM, distance, values[7], values[8], temp, mass);
                     boolean isNameInFile = false;
                     for (Star s : stars) {
-                        if (s.getName().equals(newStar.getName())) {
+                        if (s.getName().equals(newStar.getName()))
+                        {
                             isNameInFile = true;
                         }
                     }
 
-                    if (!isNameInFile) {
+                    if (!isNameInFile)
+                    {
                         stars.add(newStar);
                     }
                 }
@@ -192,6 +187,7 @@ public class Main
                 stars.remove(i);  // usuwanie elementu po indeksie
             }
         }
+        saveStars();
         updateCatalogNames();
         saveStars();
     }
